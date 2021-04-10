@@ -1,3 +1,10 @@
 from django.contrib import admin
+from .models import *
 
-# Register your models here.
+
+@admin.register(Data)
+class DataAdmin(admin.ModelAdmin):
+    list_filter = 'date_created',
+    list_display = 'file_id', 'file', 'date_created',
+    search_fields = 'file',
+    list_per_page = 50
