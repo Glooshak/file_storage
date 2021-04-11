@@ -1,9 +1,12 @@
+from pathlib import Path
+
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from rest_framework.response import Response
 from rest_framework import permissions, status
 from rest_framework.parsers import MultiPartParser, FormParser
+from storage.settings import MEDIA_ROOT
 
 from .models import Data
 from .serializers import DataSerializer
@@ -27,9 +30,10 @@ class DataViewSet(viewsets.ModelViewSet):
         try:
             for k, v in kwargs.items():
                 for id in v.split(','):
-                    obj = get_object_or_404(Data, pk=int(id))
-                    obj.file.delete()
+                    obj = get_object_or_404(Data, file_hash=id)
+                    file_path = Path(MEDIA_ROOT) / Path(str(obj))
                     self.perform_destroy(obj)
+                    file_path.unlink(missing_ok=True)
+                    return Response(status=status.HTTP_202_ACCEPTED)
         except Http404:
-            pass
-        return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_204_NO_CONTENT)

@@ -5,6 +5,6 @@ from .models import *
 @admin.register(Data)
 class DataAdmin(admin.ModelAdmin):
     list_filter = 'date_created',
-    list_display = 'file_id', 'file', 'date_created',
+    list_display = 'file_hash', 'file', 'date_created',
     search_fields = 'file',
     list_per_page = 50

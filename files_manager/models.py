@@ -2,7 +2,8 @@ from pathlib import Path
 
 from django.db import models
 from django.utils import timezone
-from django.conf.global_settings import MEDIA_URL
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 from .hashes import calculate_file_hash
 
@@ -14,7 +15,9 @@ def submit_file_path(instance, filename):
 
 
 class Data(models.Model):
-    file_id = models.AutoField(primary_key=True)
+    # TODO If there is a file with the already existed hash UNIQUE constraint failed will raise
+    # TODO need to handle this issue.
+    file_hash = models.CharField(primary_key=True, max_length=64, default='')
     file = models.FileField(upload_to=submit_file_path, null=True, max_length=255)
     date_created = models.DateTimeField(default=timezone.now)
 
@@ -24,3 +27,9 @@ class Data(models.Model):
 
     def __str__(self):
         return str(self.file.name)
+
+
+@receiver(signal=pre_save, sender=Data)
+def foo(instance, **kwargs):
+    instance.file_hash = calculate_file_hash(instance.file)
+    pass
