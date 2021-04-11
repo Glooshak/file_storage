@@ -28,6 +28,7 @@ File storage with access via HTTP.
 ### `Использование`
 
 Для проверки работоспособности программы необходим HTTP клиент. Рекомендую установить `HTTPie` (ссылка на сайт - `https://httpie.io/`).
+
 Установка HTTP клиента на Debian, Ubuntu, etc. `apt install httpie`
 
 1. Загрузка файла (upload): `http -f POST 127.0.0.1:8000/files/ file@[file_path]`
