@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from django.db import IntegrityError
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from django.http import Http404
@@ -19,12 +20,22 @@ class DataViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     parser_classes = (MultiPartParser, FormParser)
 
-    def post(self, request, format_=None):
-        serializer = DataSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def post(self, request, format_=None):
+    #     serializer = DataSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def create(self, request, *args, **kwargs):
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        except IntegrityError:
+            return Response(status=status.HTTP_409_CONFLICT)
 
     def destroy(self, request, *args, **kwargs):
         try:
