@@ -1,13 +1,12 @@
 from rest_framework import viewsets
-from .models import Data
-from .serializers import DataSerializer
-
 from django.shortcuts import get_object_or_404
 from django.http import Http404
-
 from rest_framework.response import Response
 from rest_framework import permissions, status
 from rest_framework.parsers import MultiPartParser, FormParser
+
+from .models import Data
+from .serializers import DataSerializer
 
 
 class DataViewSet(viewsets.ModelViewSet):
@@ -29,6 +28,7 @@ class DataViewSet(viewsets.ModelViewSet):
             for k, v in kwargs.items():
                 for id in v.split(','):
                     obj = get_object_or_404(Data, pk=int(id))
+                    obj.file.delete()
                     self.perform_destroy(obj)
         except Http404:
             pass
