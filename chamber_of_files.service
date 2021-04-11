@@ -1,0 +1,12 @@
+[Unit]
+Description=MyUnit
+After=multi-user.target
+
+[Service]
+Restart=always
+RestartSec=30
+WorkingDirectory=/home/thinkpad/PythonProjects/file_storage
+ExecStart=gunicorn -w 4 --bind 0.0.0.0:8000 storage.wsgi
+
+[Install]
+WantedBy=multi-user.target

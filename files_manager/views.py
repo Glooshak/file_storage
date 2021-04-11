@@ -26,6 +26,7 @@ class DataViewSet(viewsets.ModelViewSet):
             media_url = MEDIA_URL + pk[:2] + '/' + pk
             return HttpResponseRedirect(redirect_to=media_url)
         else:
+            # TODO It does not work! Code response - 500 in this case
             Response(status.HTTP_204_NO_CONTENT)
 
     def create(self, request, *args, **kwargs):
