@@ -3,12 +3,12 @@ from pathlib import Path
 from django.db import IntegrityError
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from rest_framework.response import Response
 from rest_framework import permissions, status
 from rest_framework.parsers import MultiPartParser, FormParser
-from storage.settings import MEDIA_ROOT
 
+from storage.settings import MEDIA_ROOT, MEDIA_URL
 from .models import Data
 from .serializers import DataSerializer
 
@@ -20,12 +20,13 @@ class DataViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     parser_classes = (MultiPartParser, FormParser)
 
-    # def post(self, request, format_=None):
-    #     serializer = DataSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def retrieve(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        if Data.objects.filter(file_hash=pk).exists():
+            media_url = MEDIA_URL + pk[:2] + '/' + pk
+            return HttpResponseRedirect(redirect_to=media_url)
+        else:
+            Response(status.HTTP_204_NO_CONTENT)
 
     def create(self, request, *args, **kwargs):
         try:
@@ -33,9 +34,11 @@ class DataViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
+            serializer.data.pop('file')
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        # If we receive a file with a hash that already exists in db.
         except IntegrityError:
-            return Response(status=status.HTTP_409_CONFLICT)
+            return Response(status.HTTP_409_CONFLICT)
 
     def destroy(self, request, *args, **kwargs):
         try:
