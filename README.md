@@ -9,7 +9,7 @@ File storage with access via HTTP.
 
 ### `Подготовка к запуску`
 
-Для запуска программы необходим `Python 3+`
+Для запуска программы необходим `Python 3.8+`
 
 Склонировать проект из репозитория: `git clone https://github.com/Glooshak/file_storage`
 
