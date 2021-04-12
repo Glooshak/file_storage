@@ -37,10 +37,10 @@ File storage with access via HTTP.
 
 ![img.png](tutorial_images/uploading.png)
 
-2. Скачивание файла (download): `http --download 127.0.0.1:8000/files/[file_hash]`
+2. Скачивание файла (download): `http --download 127.0.0.1:8000/files/[file_hash]/`
 
 ![img.png](tutorial_images/downloading.png)
 
-3. Удаление файла (deleting): `http DELETE 127.0.0.1:8000/files/[file_hash]`
+3. Удаление файла (delete): `http DELETE 127.0.0.1:8000/files/[file_hash]/`
 
 ![img.png](tutorial_images/deleting.png)
