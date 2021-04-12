@@ -44,8 +44,8 @@ class DataViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         try:
             for k, v in kwargs.items():
-                for id in v.split(','):
-                    obj = get_object_or_404(Data, file_hash=id)
+                for id_ in v.split(','):
+                    obj = get_object_or_404(Data, file_hash=id_)
                     file_path = Path(MEDIA_ROOT) / Path(str(obj))
                     self.perform_destroy(obj)
                     file_path.unlink(missing_ok=True)
