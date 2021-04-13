@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import permissions, status
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from storage.settings import MEDIA_ROOT, MEDIA_URL
+from storage.settings import MEDIA_ROOT
 from .models import Data
 from .serializers import DataSerializer
 

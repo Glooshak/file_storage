@@ -30,6 +30,5 @@ class Data(models.Model):
 
 
 @receiver(signal=pre_save, sender=Data)
-def foo(instance, **kwargs):
+def assign_pk(instance, **kwargs):
     instance.file_hash = calculate_file_hash(instance.file)
-    pass
