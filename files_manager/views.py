@@ -23,11 +23,10 @@ class DataViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         if Data.objects.filter(file_hash=pk).exists():
-            media_url = MEDIA_URL + pk[:2] + '/' + pk
-            return HttpResponseRedirect(redirect_to=media_url)
+            obj = Data.objects.get(file_hash=pk)
+            return HttpResponseRedirect(redirect_to=obj.file.url)
         else:
-            # TODO It does not work! Code response - 500 in this case
-            Response(status.HTTP_204_NO_CONTENT)
+            get_object_or_404(Data, file_hash=pk)
 
     def create(self, request, *args, **kwargs):
         try:
