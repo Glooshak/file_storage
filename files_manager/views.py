@@ -1,11 +1,12 @@
 from pathlib import Path
 import logging
 from logging import getLogger
+from http import HTTPStatus
 
 from django.db import IntegrityError
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse, FileResponse, HttpResponseNotFound
 from rest_framework.response import Response
 from rest_framework import permissions, status
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -32,9 +33,11 @@ class DataViewSet(viewsets.ModelViewSet):
         pk = kwargs.get('pk')
         if Data.objects.filter(file_hash=pk).exists() and storage.exists(obtain_relative_file_path(pk)):
             obj = Data.objects.get(file_hash=pk)
-            return HttpResponseRedirect(redirect_to=obj.file.url)
+            # FileResponse instance streams a file out in small chunks. The file will be closed automatically
+            response = FileResponse(obj.file.open())
+            return response
         else:
-            get_object_or_404(Data, file_hash=pk)
+            return HttpResponseNotFound()
 
     def create(self, request, *args, **kwargs):
         try:
