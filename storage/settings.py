@@ -51,8 +51,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-MEDIA_URL = "/store/"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'store')
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 ROOT_URLCONF = 'storage.urls'
 
