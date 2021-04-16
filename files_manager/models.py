@@ -23,7 +23,6 @@ def submit_file_path(instance, filename):
 
 
 def validate_file(uploading_file):
-    # TODO a file is not on a disk, it is in memory, what will happen if file will be larger than capacity of memory?
     file_hash = calculate_file_hash(uploading_file)
     if Data.objects.filter(file_hash=file_hash).exists() and storage.exists(obtain_relative_file_path(file_hash)):
         raise ValidationError(f'The file with this hash is already exists {file_hash}')

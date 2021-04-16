@@ -33,7 +33,7 @@ class DataViewSet(viewsets.ModelViewSet):
         pk = kwargs.get('pk')
         if Data.objects.filter(file_hash=pk).exists() and storage.exists(obtain_relative_file_path(pk)):
             obj = Data.objects.get(file_hash=pk)
-            # FileResponse instance streams a file out in small chunks. The file will be closed automatically
+            # FileResponse instance streams a file out in small chunks. The file will be closed automatically.
             response = FileResponse(obj.file.open())
             return response
         else:
