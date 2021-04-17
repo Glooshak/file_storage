@@ -6,7 +6,7 @@ from http import HTTPStatus
 from django.db import IntegrityError
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
-from django.http import Http404, HttpResponseRedirect, HttpResponse, FileResponse, HttpResponseNotFound
+from django.http import Http404, HttpResponseRedirect, HttpResponse, FileResponse, HttpResponseNotFound, JsonResponse
 from rest_framework.response import Response
 from rest_framework import permissions, status
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -28,6 +28,22 @@ class DataViewSet(viewsets.ModelViewSet):
 
     permission_classes = (permissions.AllowAny,)
     parser_classes = (MultiPartParser, FormParser)
+
+    def list(self, request, *args, **kwargs):
+        queryset = Data.objects.all()
+        data = dict(content='There is no uploaded files!')
+
+        if queryset:
+            files_dict = dict()
+            for number, instance in enumerate(queryset):
+                datetime_representation = instance.date_created.strftime("%m/%d/%Y, %H:%M:%S")
+                files_dict[number + 1] = dict(zip(
+                    ['file_hash', 'size', 'location', 'date_created'],
+                    [instance.file_hash, instance.file.size, instance.file.path, datetime_representation]
+                ))
+            data['content'] = files_dict
+
+        return JsonResponse(data, safe=True)
 
     def retrieve(self, request, *args, **kwargs):
         pk = kwargs.get('pk')

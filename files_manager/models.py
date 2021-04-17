@@ -25,7 +25,7 @@ def submit_file_path(instance, filename):
 def validate_file(uploading_file):
     file_hash = calculate_file_hash(uploading_file)
     if Data.objects.filter(file_hash=file_hash).exists() and storage.exists(obtain_relative_file_path(file_hash)):
-        raise ValidationError(f'The file with this hash is already exists {file_hash}')
+        raise ValidationError(f'The file with this hash is already exists: {file_hash}')
     else:
         validate_file.previous_file_hash = file_hash
 
@@ -46,7 +46,7 @@ class Data(models.Model):
         verbose_name_plural = 'Files'
 
     def __str__(self):
-        return str(self.file.name)
+        return str(self.file_hash)
 
 
 @receiver(signal=pre_save, sender=Data)
