@@ -37,10 +37,13 @@ class DataViewSet(viewsets.ModelViewSet):
             files_dict = dict()
             for number, instance in enumerate(queryset):
                 datetime_representation = instance.date_created.strftime("%m/%d/%Y, %H:%M:%S")
-                files_dict[number + 1] = dict(zip(
-                    ['file_hash', 'size', 'location', 'date_created'],
-                    [instance.file_hash, instance.file.size, instance.file.path, datetime_representation]
-                ))
+                files_dict[number + 1] = dict(
+                    zip(
+                        ['file_hash', 'size', 'location', 'date_created'],
+                        [instance.file_hash, instance.file.size, instance.file.path, datetime_representation]
+
+                    )
+                )
             data['content'] = files_dict
 
         return JsonResponse(data, safe=True)
