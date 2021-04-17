@@ -44,3 +44,8 @@ File storage with access via HTTP.
 3. Удаление файла (delete): `http DELETE 127.0.0.1:8000/files/[file_hash]/`
 
 ![img.png](tutorial_images/deleting.png)
+
+4. Получение списка всех загруженных файлов на данный момент в JSON формате с дополнительной информацией:
+`http 127.0.0.1:8000/files/`
+   
+![img.png](tutorial_images/displaying_content.png)
