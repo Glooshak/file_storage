@@ -22,6 +22,14 @@ logger = getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
+def show_feed(request):
+    return HttpResponse('<h1>There will be files</h1>')
+
+
+def show_details(request, file_hash):
+    return HttpResponse('<h1>There will be files details</h1>')
+
+
 class DataViewSet(viewsets.ModelViewSet):
     queryset = Data.objects.all()
     serializer_class = DataSerializer

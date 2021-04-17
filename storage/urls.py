@@ -25,6 +25,7 @@ from files_manager.custom_storage_system import storage
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
+    path('feed/', include('files_manager.urls'))
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
