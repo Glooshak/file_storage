@@ -7,6 +7,8 @@ from django.db import models
 from django.utils import timezone
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.shortcuts import reverse
+
 
 from .hashes import calculate_file_hash
 from .custom_storage_system import storage
@@ -44,6 +46,9 @@ class Data(models.Model):
     class Meta:
         ordering = '-date_created',
         verbose_name_plural = 'Files'
+
+    def get_absolute_url(self):
+        return reverse('file_detail', kwargs={'file_hash': self.file_hash})
 
     def __str__(self):
         return str(self.file_hash)

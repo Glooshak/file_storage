@@ -30,6 +30,10 @@ def show_details(request, file_hash):
     return HttpResponse('<h1>There will be files details</h1>')
 
 
+def upload_file(request):
+    return HttpResponse('<h1>Here you will be uploading files</h1>')
+
+
 class DataViewSet(viewsets.ModelViewSet):
     queryset = Data.objects.all()
     serializer_class = DataSerializer
