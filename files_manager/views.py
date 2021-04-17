@@ -31,7 +31,7 @@ class DataViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = Data.objects.all()
-        data = dict(content='There is no uploaded files!')
+        data = dict(content='There are no uploaded files!')
 
         if queryset:
             files_dict = dict()
@@ -41,7 +41,6 @@ class DataViewSet(viewsets.ModelViewSet):
                     zip(
                         ['file_hash', 'size', 'location', 'date_created'],
                         [instance.file_hash, instance.file.size, instance.file.path, datetime_representation]
-
                     )
                 )
             data['content'] = files_dict
