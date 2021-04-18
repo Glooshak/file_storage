@@ -1,0 +1,28 @@
+{% extends 'files_manager/base.html' %}
+
+{% block title %}
+    Feed
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h4>List of files:</h4>
+    </div>
+    <div class="files mt-5">
+        <ul class="list-group list-group-numbered">
+            {% for name in names %}
+            <li class="list-group-item">{{ name }}
+                <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
+                    <a href="#" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                       title="Show detailed information about this file">Show details</a>
+                    <a href="{% url 'successful deletion' %}" class="btn btn-danger" data-bs-toggle="tooltip"
+                       data-bs-placement="top"
+                       title="Delete this file">Delete file</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+{% endblock %}

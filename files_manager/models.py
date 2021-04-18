@@ -48,7 +48,7 @@ class Data(models.Model):
         verbose_name_plural = 'Files'
 
     def get_absolute_url(self):
-        return reverse('file_detail', kwargs={'file_hash': self.file_hash})
+        return reverse('files_manager-file_details', kwargs={'file_hash': self.file_hash})
 
     def __str__(self):
         return str(self.file_hash)

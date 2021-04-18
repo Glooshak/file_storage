@@ -5,9 +5,10 @@ from http import HTTPStatus
 
 from django.db import IntegrityError
 from rest_framework import viewsets
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.http import Http404, HttpResponseRedirect, HttpResponse, FileResponse, HttpResponseNotFound, JsonResponse
 from rest_framework.response import Response
+from django.views.decorators.http import require_GET, require_POST
 from rest_framework import permissions, status
 from rest_framework.parsers import MultiPartParser, FormParser
 
@@ -22,16 +23,30 @@ logger = getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
+@require_GET
 def show_feed(request):
-    return HttpResponse('<h1>There will be files</h1>')
+    files_hashes = []
+    for obj_ in Data.objects.all():
+        files_hashes.append(obj_.file_hash)
+    return render(request, 'files_manager/feed.html', context={'names': files_hashes})
 
 
+@require_GET
 def show_details(request, file_hash):
     return HttpResponse('<h1>There will be files details</h1>')
 
 
+@require_GET
 def upload_file(request):
-    return HttpResponse('<h1>Here you will be uploading files</h1>')
+    return render(request, 'files_manager/uploading_file.html')
+
+
+def confirm_deletion(request):
+    return render(request, 'files_manager/successfully_deletion.html')
+
+
+def confirm_uploading(request):
+    return render(request, 'files_manager/successfully_uploading.html')
 
 
 class DataViewSet(viewsets.ModelViewSet):
