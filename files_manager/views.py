@@ -6,7 +6,9 @@ from http import HTTPStatus
 from django.db import IntegrityError
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404, render
-from django.http import Http404, HttpResponseRedirect, HttpResponse, FileResponse, HttpResponseNotFound, JsonResponse
+from django.http import Http404, HttpResponseRedirect, HttpResponse, FileResponse, HttpResponseNotFound, JsonResponse, \
+    HttpResponseForbidden, HttpResponsePermanentRedirect
+from django.urls import reverse
 from rest_framework.response import Response
 from django.views.decorators.http import require_GET, require_POST
 from rest_framework import permissions, status
@@ -25,10 +27,7 @@ logging.basicConfig(level=logging.INFO)
 
 @require_GET
 def show_feed(request):
-    files_hashes = []
-    for obj_ in Data.objects.all():
-        files_hashes.append(obj_.file_hash)
-    return render(request, 'files_manager/feed.html', context={'names': files_hashes})
+    return render(request, 'files_manager/feed.html', context={'objects': Data.objects.all()})
 
 
 @require_GET
@@ -41,8 +40,15 @@ def upload_file(request):
     return render(request, 'files_manager/uploading_file.html')
 
 
-def confirm_deletion(request):
-    return render(request, 'files_manager/successfully_deletion.html')
+def execute_deletion(request, file_hash: str):
+    if Data.objects.filter(file_hash=file_hash).exists():
+        file = str(obtain_relative_file_path(file_hash))
+        if storage.exists(file):
+            storage.delete(file)
+        Data.objects.get(file_hash=file_hash).delete()
+        return render(request, 'files_manager/successfully_deletion.html', context={'file': file_hash})
+    else:
+        return HttpResponsePermanentRedirect(redirect_to=reverse('files_manager-files_list'))
 
 
 def confirm_uploading(request):
