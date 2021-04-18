@@ -1,0 +1,24 @@
+{% extends 'files_manager/base.html' %}
+
+{% block title %}
+    File details
+{% endblock %}
+
+{% block content %}
+    <ul class="list-group list-group-horizontal">
+        <li class="list-group-item flex-fill list-group-item-info">File hash (name)</li>
+        <li class="list-group-item flex-fill list-group-item-success">{{ name }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal-sm">
+        <li class="list-group-item flex-fill list-group-item-info">Date created</li>
+        <li class="list-group-item flex-fill list-group-item-success">{{ date_created }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal-md">
+        <li class="list-group-item flex-fill list-group-item-info">Location</li>
+        <li class="list-group-item flex-fill list-group-item-success">{{ location }}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal-lg">
+        <li class="list-group-item flex-fill list-group-item-info">Size</li>
+        <li class="list-group-item flex-fill list-group-item-success">{{ size|filesizeformat }}</li>
+    </ul>
+{% endblock %}

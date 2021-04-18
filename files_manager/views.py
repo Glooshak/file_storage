@@ -32,7 +32,14 @@ def show_feed(request):
 
 @require_GET
 def show_details(request, file_hash):
-    return HttpResponse('<h1>There will be files details</h1>')
+    obj = Data.objects.get(file_hash=file_hash)
+    datetime_representation = obj.date_created.strftime("%m/%d/%Y, %H:%M:%S")
+    return render(request, 'files_manager/file_details.html', context={
+        'name': obj.file_hash,
+        'date_created': datetime_representation,
+        'location': obj.file.path,
+        'size': obj.file.size
+    })
 
 
 @require_GET
