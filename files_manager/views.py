@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import Http404, HttpResponseRedirect, HttpResponse, FileResponse, HttpResponseNotFound, JsonResponse, \
     HttpResponseForbidden, HttpResponsePermanentRedirect
 from django.urls import reverse
+from django.views import View
 from rest_framework.response import Response
 from django.views.decorators.http import require_GET, require_POST
 from rest_framework import permissions, status
@@ -25,9 +26,9 @@ logger = getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 
-@require_GET
-def show_feed(request):
-    return render(request, 'files_manager/feed.html', context={'objects': Data.objects.all()})
+class ShowingFeed(View):
+    def get(self, request):
+        return render(request, 'files_manager/feed.html', context={'objects': Data.objects.all()})
 
 
 @require_GET
@@ -47,6 +48,7 @@ def upload_file(request):
     return render(request, 'files_manager/uploading_file.html')
 
 
+@require_GET
 def execute_deletion(request, file_hash: str):
     if Data.objects.filter(file_hash=file_hash).exists():
         file = str(obtain_relative_file_path(file_hash))
@@ -58,6 +60,7 @@ def execute_deletion(request, file_hash: str):
         return HttpResponsePermanentRedirect(redirect_to=reverse('files_manager-files_list'))
 
 
+@require_POST
 def confirm_uploading(request):
     return render(request, 'files_manager/successfully_uploading.html')
 
