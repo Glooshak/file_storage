@@ -20,6 +20,7 @@ from .models import Data
 from .serializers import DataSerializer
 from .custom_storage_system import storage
 from .utils import obtain_relative_file_path
+from .forms import *
 
 
 logger = getLogger(__name__)
@@ -43,9 +44,37 @@ def show_details(request, file_hash):
     })
 
 
-@require_GET
-def upload_file(request):
-    return render(request, 'files_manager/uploading_file.html')
+def get_file(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = FileUploadForm(request.POST, request.FILES)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            return HttpResponseRedirect(reverse('successful_uploading'))
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = FileUploadForm()
+
+    return render(request, 'files_manager/uploading_file.html', {'form': form})
+
+
+# class FileUploadView(View):
+#     def get(self, request):
+#         form = FileUploadForm()
+#         return render(request, 'files_manager/uploading_file.html', {form: 'form'})
+#
+#     def post(self, request):
+#         form = FileUploadForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             return HttpResponseRedirect(reverse('files_manager-uploading_file'))
+#         else:
+#             form = FileUploadForm()
+#             return render(request, 'files_manager/uploading_file.html', {form: 'form'})
 
 
 @require_GET
@@ -60,9 +89,9 @@ def execute_deletion(request, file_hash: str):
         return HttpResponsePermanentRedirect(redirect_to=reverse('files_manager-files_list'))
 
 
-@require_POST
+@require_GET
 def confirm_uploading(request):
-    return render(request, 'files_manager/successfully_uploading.html')
+    return render(request, 'files_manager/successful_uploading.html')
 
 
 class DataViewSet(viewsets.ModelViewSet):
