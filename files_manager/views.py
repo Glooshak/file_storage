@@ -44,37 +44,18 @@ def show_details(request, file_hash):
     })
 
 
-def get_file(request):
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = FileUploadForm(request.POST, request.FILES)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            return HttpResponseRedirect(reverse('successful_uploading'))
-
-    # if a GET (or any other method) we'll create a blank form
-    else:
+class FileUploadView(View):
+    def get(self, request):
         form = FileUploadForm()
+        return render(request, 'files_manager/uploading_file.html', {'form': form})
 
-    return render(request, 'files_manager/uploading_file.html', {'form': form})
-
-
-# class FileUploadView(View):
-#     def get(self, request):
-#         form = FileUploadForm()
-#         return render(request, 'files_manager/uploading_file.html', {form: 'form'})
-#
-#     def post(self, request):
-#         form = FileUploadForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             return HttpResponseRedirect(reverse('files_manager-uploading_file'))
-#         else:
-#             form = FileUploadForm()
-#             return render(request, 'files_manager/uploading_file.html', {form: 'form'})
+    def post(self, request):
+        form = FileUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            return HttpResponseRedirect(reverse('files_manager-successful_uploading'))
+        else:
+            form = FileUploadForm()
+            return render(request, 'files_manager/uploading_file.html', {'form': form})
 
 
 @require_GET
