@@ -52,9 +52,9 @@ class FileUploadView(View):
     def post(self, request):
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
+            form.save_file()
             return HttpResponseRedirect(reverse('files_manager-successful_uploading'))
         else:
-            form = FileUploadForm()
             return render(request, 'files_manager/uploading_file.html', {'form': form})
 
 

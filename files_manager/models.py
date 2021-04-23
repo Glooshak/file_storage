@@ -56,4 +56,4 @@ class Data(models.Model):
 
 @receiver(signal=pre_save, sender=Data)
 def assign_pk(instance, **kwargs):
-    instance.file_hash = validate_file.previous_file_hash
+    if not instance.file_hash: instance.file_hash = validate_file.previous_file_hash
