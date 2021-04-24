@@ -49,3 +49,8 @@ File storage with access via HTTP.
 `http 127.0.0.1:8000/files/`
    
 ![img.png](tutorial_images/displaying_content.png)
+
+
+### `Взаимодействие с помощью бразуера`
+
+Все перечисленные выше операции над файлами также возможно реализовать в браузере. Для этого необходимо перейти по адресу: `http://127.0.0.1:8000/browser_api/`
