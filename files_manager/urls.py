@@ -13,5 +13,6 @@ urlpatterns = [
         'successful_downloading/<slug:file_hash>/',
         DownloadingFile.as_view(),
         name='files_manager-successful_downloading'
-    )
+    ),
+    path('search/', Searching.as_view(), name='files_manager-searching')
 ]

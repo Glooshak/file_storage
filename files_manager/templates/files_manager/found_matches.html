@@ -1,0 +1,35 @@
+{% extends 'files_manager/base.html' %}
+
+{% block title %}
+    Successful searching
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h4>Result of your searching:</h4>
+    </div>
+    <div class="files mt-5">
+        <ul class="list-group list-group-numbered">
+                {% for object in objects %}
+                    <li class="list-group-item">{{ object.file_hash }}
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Basic mixed styles example">
+                            <a href="{{ object.get_absolute_url }}" class="btn btn-success" data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Show detailed information about this file">Show details</a>
+                            <a href="{% url 'files_manager-successful_deletion' object.file_hash %}"
+                               class="btn btn-danger"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Delete this file">Delete file</a>
+                            <a href="{% url 'files_manager-successful_downloading' object.file_hash %}"
+                               class="btn btn-info"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Download file">Download file</a>
+                        </div>
+                    </li>
+                {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}

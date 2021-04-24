@@ -5,7 +5,7 @@ from http import HTTPStatus
 
 from django.db import IntegrityError
 from rest_framework import viewsets
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import Http404, HttpResponseRedirect, HttpResponse, FileResponse, HttpResponseNotFound, JsonResponse, \
     HttpResponseForbidden, HttpResponsePermanentRedirect
 from django.urls import reverse
@@ -25,6 +25,17 @@ from .forms import *
 
 logger = getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
+
+class Searching(View):
+    def get(self, request, *args, **kwargs):
+        query = request.GET['query']
+        coincidences = list(filter(lambda x: query in x, Data.retrieve_files_hashes()))
+        if coincidences:
+            objects = Data.objects.filter(file_hash__in=coincidences)
+            return render(request, 'files_manager/found_matches.html', context=dict(objects=objects))
+        else:
+            return render(request, 'files_manager/unsuccessful_searching.html', context={'query': query})
 
 
 class ShowingFeed(View):
@@ -65,6 +76,11 @@ def execute_deletion(request, file_hash: str):
         if storage.exists(file):
             storage.delete(file)
         Data.objects.get(file_hash=file_hash).delete()
+
+        # TODO: Come up with something that will be better!
+        if 'search' in request.headers._store.get('referer')[1]:
+            return redirect(request.headers._store.get('referer')[1])
+
         return render(request, 'files_manager/successfully_deletion.html', context={'file': file_hash})
     else:
         return HttpResponsePermanentRedirect(redirect_to=reverse('files_manager-files_list'))

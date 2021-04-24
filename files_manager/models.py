@@ -50,6 +50,10 @@ class Data(models.Model):
     def get_absolute_url(self):
         return reverse('files_manager-file_details', kwargs={'file_hash': self.file_hash})
 
+    @classmethod
+    def retrieve_files_hashes(cls):
+        return [element.get('file_hash') for element in cls.objects.values('file_hash')]
+
     def __str__(self):
         return str(self.file_hash)
 

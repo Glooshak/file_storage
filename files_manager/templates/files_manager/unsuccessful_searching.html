@@ -1,0 +1,11 @@
+{% extends 'files_manager/base.html' %}
+
+{% block title %}
+    Unsuccessful searching
+{% endblock %}
+
+{% block content %}
+    <div class="alert alert-danger" role="alert">
+        According to your query: "{{ query }}" - there are no files! Perhaps you have to try again?
+    </div>
+{% endblock %}
