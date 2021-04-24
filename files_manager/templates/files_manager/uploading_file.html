@@ -5,10 +5,14 @@
 {% endblock %}
 
 {% block content %}
-    <form action={% url 'files_manager-uploading_file'%} method="post" enctype="multipart/form-data">
+    <form action={% url 'files_manager-uploading_file' %} method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Submit">
+        <div class="mt-2">
+            {{ form.as_p }}
+        </div>
+        <div class="mt-5">
+            <input type="submit" class="btn btn-success" value="Submit">
+        </div>
     </form>
 {% endblock %}
 

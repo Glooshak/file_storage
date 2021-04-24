@@ -72,7 +72,8 @@ def execute_deletion(request, file_hash: str):
 
 @require_GET
 def confirm_uploading(request):
-    return render(request, 'files_manager/successful_uploading.html')
+    file_hash = Data.objects.first().file_hash
+    return render(request, 'files_manager/successful_uploading.html', context={'file_hash': file_hash})
 
 
 class DataViewSet(viewsets.ModelViewSet):
@@ -118,7 +119,7 @@ class DataViewSet(viewsets.ModelViewSet):
             headers = self.get_success_headers(serializer.data)
             serializer.data.pop('file')
             return Response(
-                data={'file_hash': Data.objects.last().file_hash},
+                data={'file_hash': Data.objects.first().file_hash},
                 status=status.HTTP_201_CREATED,
                 headers=headers
             )

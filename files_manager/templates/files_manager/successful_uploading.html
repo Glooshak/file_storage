@@ -5,5 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    Your file was uploaded successfully
+    <div class="alert alert-success" role="alert">
+        {{ file_hash }} was successfully uploaded to the storage!
+    </div>
 {% endblock %}
