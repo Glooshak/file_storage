@@ -1,0 +1,11 @@
+{% extends 'files_manager/base.html' %}
+
+{% block title %}
+    Successful uploading
+{% endblock %}
+
+{% block content %}
+    <div class="alert alert-success" role="alert">
+        {{ file_hash }} was successfully uploaded to the storage!
+    </div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'files_manager/base.html' %}
+
+{% block title %}
+    Successful deletion
+{% endblock %}
+
+{% block content %}
+    <div class="alert alert-success" role="alert">
+        {{ file }} was successfully deleted from the storage!
+    </div>
+{% endblock %}

@@ -7,6 +7,8 @@ from django.db import models
 from django.utils import timezone
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.shortcuts import reverse
+
 
 from .hashes import calculate_file_hash
 from .custom_storage_system import storage
@@ -45,10 +47,13 @@ class Data(models.Model):
         ordering = '-date_created',
         verbose_name_plural = 'Files'
 
+    def get_absolute_url(self):
+        return reverse('files_manager-file_details', kwargs={'file_hash': self.file_hash})
+
     def __str__(self):
         return str(self.file_hash)
 
 
 @receiver(signal=pre_save, sender=Data)
 def assign_pk(instance, **kwargs):
-    instance.file_hash = validate_file.previous_file_hash
+    if not instance.file_hash: instance.file_hash = validate_file.previous_file_hash
