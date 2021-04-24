@@ -65,7 +65,7 @@ class DataViewSet(viewsets.ModelViewSet):
             headers = self.get_success_headers(serializer.data)
             serializer.data.pop('file')
             return Response(
-                data={'file_hash': Data.objects.last().file_hash},
+                data={'file_hash': Data.objects.first().file_hash},
                 status=status.HTTP_201_CREATED,
                 headers=headers
             )
@@ -73,7 +73,7 @@ class DataViewSet(viewsets.ModelViewSet):
             logger.warning(f'Somebody deleted a file that has its record in the db,'
                            f' but another file with the same hash was uploaded, so this new file '
                            f'will inherit the record in the db of the old deleted file.')
-            return Response(data={'file_hash': Data.objects.last().file_hash}, status=status.HTTP_201_CREATED)
+            return Response(data={'file_hash': Data.objects.first().file_hash}, status=status.HTTP_201_CREATED)
 
     def destroy(self, request, *args, **kwargs):
         try:
