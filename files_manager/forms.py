@@ -18,5 +18,5 @@ class FileUploadForm(forms.Form):
         file = self.cleaned_data['file']
         self.file_hash = calculate_file_hash(file)
         if Data.objects.filter(file_hash=self.file_hash).count():
-            ValidationError(f'File with hash {file_hash} is already exists!')
+            raise ValidationError(f'File with hash {self.file_hash} is already exists!')
         return file
