@@ -76,6 +76,17 @@ def confirm_uploading(request):
     return render(request, 'files_manager/successful_uploading.html', context={'file_hash': file_hash})
 
 
+class DownloadingFile(View):
+    def get(self, request, file_hash):
+        if Data.objects.filter(file_hash=file_hash).exists() and storage.exists(obtain_relative_file_path(file_hash)):
+            obj = Data.objects.get(file_hash=file_hash)
+            # FileResponse instance streams a file out in small chunks. The file will be closed automatically.
+            response = FileResponse(obj.file.open())
+            return response
+        else:
+            return HttpResponseNotFound()
+
+
 class DataViewSet(viewsets.ModelViewSet):
     queryset = Data.objects.all()
     serializer_class = DataSerializer
