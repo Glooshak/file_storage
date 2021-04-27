@@ -20,9 +20,11 @@ from django.conf.urls.static import static
 
 from .routers import router
 from files_manager.custom_storage_system import storage
+from .views import *
 
 
 urlpatterns = [
+    path('', redirect_to_content),
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path('browser_api/', include('files_manager.urls'))
