@@ -21,6 +21,7 @@ from .serializers import DataSerializer
 from .custom_storage_system import storage
 from .utils import obtain_relative_file_path
 from .forms import *
+from django.core.paginator import Paginator
 
 
 logger = getLogger(__name__)
@@ -40,7 +41,25 @@ class Searching(View):
 
 class ShowingFeed(View):
     def get(self, request):
-        return render(request, 'files_manager/feed.html', context={'objects': Data.objects.all()})
+        files = Data.objects.all()
+
+        paginator = Paginator(files, 2)
+        page_number = request.GET.get('page', 1)
+        page = paginator.get_page(page_number)
+
+        # TODO Use is_paginated to not show pagination buttons on a webpage.
+        is_paginated = page.has_other_pages()
+
+        previous_url = f'?page={page.previous_page_number()}' if page.has_previous() else ''
+        next_url = f'?page={page.next_page_number()}' if page.has_next() else ''
+
+        context = {
+            'page': page,
+            'previous_url': previous_url,
+            'next_url': next_url,
+        }
+
+        return render(request, 'files_manager/feed.html', context=context)
 
 
 @require_GET
