@@ -7,4 +7,4 @@ refresh_db:
 			echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@myproject.com', 'hack_me')" | python manage.py shell
 
 start:
-			python manage.py runserver
+			python manage.py runserver 0.0.0.0:8000
